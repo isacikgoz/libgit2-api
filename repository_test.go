@@ -12,17 +12,22 @@ func TestClone(t *testing.T) {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	defer os.RemoveAll(dir) // clean up
+	creds := &CredentialsAsSshAgent{
+		UserName: "git",
+	}
 	opts := &CloneOptions{}
+	opts.Credentials = creds
 	var tests = []struct {
 		inputDir string
 		inputURL string
 		inputOpt *CloneOptions
 	}{
-		{dir, "https://github.com/isacikgoz/.vim/", opts},
+		{dir, "git@github.com:isacikgoz/sig.git", opts},
 	}
 	for _, test := range tests {
 		if _, err := Clone(test.inputDir, test.inputURL, test.inputOpt); err != nil {
-			t.Errorf("Test Failed. dir: %s, url: %s inputted, got \"%s\" as error.", test.inputDir, test.inputURL, err.Error())
+			t.Errorf("Test Failed. dir: %s, url: %s inputted, got \"%s\" as error.",
+			 test.inputDir, test.inputURL, err.Error())
 		}
 	}
 }
