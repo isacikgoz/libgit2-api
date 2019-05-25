@@ -8,3 +8,14 @@ The main reason of developing such library is to use it on my various git tools.
 - Checkout
 - Pull
 - Log (kind of)
+
+# Using this API
+
+First of all, you will need a compiled libgit2 library on your operating system. If you are on macOS and using brew, you can install libgit2 via `brew install libgit2`, if you want to build it by yourself here you go:
+- make sure you have following libraries and tools installed:
+  - cmake
+  - pkg-config
+  - libssl-dev
+- run the script file: `scripts/install-libgit2.sh`
+
+After you install required library, you can use this API. Also, I am considering to supply a sample make file so that you can build your Go application with this project.
