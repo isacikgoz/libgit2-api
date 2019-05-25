@@ -12,8 +12,7 @@ func TestClone(t *testing.T) {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	defer os.RemoveAll(dir) // clean up
-	creds := &CredentialsAsSshAgent{
-		UserName: "git",
+	creds := &CredentialsAsPlainText{
 	}
 	opts := &CloneOptions{}
 	opts.Credentials = creds
@@ -22,7 +21,7 @@ func TestClone(t *testing.T) {
 		inputURL string
 		inputOpt *CloneOptions
 	}{
-		{dir, "git@github.com:isacikgoz/sig.git", opts},
+		{dir, "https://github.com/isacikgoz/gia.git", opts},
 	}
 	for _, test := range tests {
 		if _, err := Clone(test.inputDir, test.inputURL, test.inputOpt); err != nil {
