@@ -11,7 +11,11 @@ The main reason of developing such library is to use it on my various git tools.
 
 # Using this API
 
-First of all, you will need a compiled libgit2 library on your operating system. If you are on macOS and using brew, you can install libgit2 via `brew install libgit2`, if you want to build it by yourself here you go:
+First of all you should get this project by
+
+`go get -d github.com/isacikoz/libgit2-api`
+
+After you downloaded it you will need a compiled libgit2 library on your operating system. If you are on macOS and using brew, you can install libgit2 via `brew install libgit2`, if you want to build it by yourself here you go:
 - make sure you have following libraries and tools installed:
   - cmake
   - pkg-config
