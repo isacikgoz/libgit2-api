@@ -9,4 +9,14 @@ var (
 	ErrAuthenticationRequired = errors.New("authentication required")
 	// ErrAuthenticationType means that given credentials cannot be used for given repository url
 	ErrAuthenticationType = errors.New("authentication method is not valid")
+	// ErrClone is a generic clone error
+	ErrClone = errors.New("cannot clone repo")
+	// ErrCannotOpenRepo is returned when the repo couldn't be loaded from filesystem
+	ErrCannotOpenRepo = errors.New("cannot load repository")
+	// ErrCreateCallbackFail is reuterned when an error occured while creating callbacks
+	ErrCreateCallbackFail = errors.New("cannot create default callbacks")
+	// ErrNoRemoteName if the remote name is empty while fetching
+	ErrNoRemoteName = errors.New("remote name not specified")
+	// ErrNotValidRemoteName is returned if the given remote name is not found
+	ErrNotValidRemoteName = errors.New("not a valid remote name")
 )

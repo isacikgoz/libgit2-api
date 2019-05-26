@@ -11,7 +11,7 @@ The main reason of developing such library is to use it on my various git tools.
 
 # Using this API
 
-First of all you should get this project by
+First of all you should get this project by:
 
 `go get -d github.com/isacikoz/libgit2-api`
 
@@ -19,7 +19,8 @@ After you downloaded it you will need a compiled libgit2 library on your operati
 - make sure you have following libraries and tools installed:
   - cmake
   - pkg-config
-  - libssl-dev
-- run the script file: `scripts/install-libgit2.sh`
+  - libssl
+  - libssh2
+- run the script file (Linux): `scripts/install-libgit2.sh`
 
 After you install required library, you can use this API. Also, I am considering to supply a sample make file so that you can build your Go application with this project.
