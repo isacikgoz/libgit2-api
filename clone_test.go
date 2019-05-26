@@ -27,7 +27,7 @@ func TestClone(t *testing.T) {
 		inputOpt *CloneOptions
 		err error
 	}{
-		{dirs[0], "https://github.com/isacikgoz/gia.git", opts, nil},
+		{dirs[0], "https://github.com/isacikgoz/libgit2-api.git", opts, nil},
 		{dirs[1], "", opts, ErrClone},
 	}
 	for _, test := range tests {

@@ -14,7 +14,7 @@ func TestFetch(t *testing.T) {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	defer os.RemoveAll(dir) // clean up
-	repo, err := Clone(dir, "https://github.com/isacikgoz/gia.git", &CloneOptions{
+	repo, err := Clone(dir, "https://github.com/isacikgoz/libgit2-api.git", &CloneOptions{
 		Credentials: creds,
 	})
 	if err != nil {
