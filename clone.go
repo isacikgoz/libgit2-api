@@ -22,7 +22,6 @@ func Clone(path string, url string, opts *CloneOptions) (*Repository, error) {
 	options.FetchOptions = fetchOptions
 	r, err:= lib.Clone(url, path, options)
 	if err != nil {
-		panic(err)
 		return nil, ErrClone
 	}
 	repository := &Repository{

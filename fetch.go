@@ -37,7 +37,6 @@ func (r *Repository) Fetch (opts *FetchOptions) error {
 			return ErrNotValidRemoteName
 		}
 		if err := remote.Fetch(nil, options, ""); err != nil {
-			panic(err)
 			return err
 		}
 	}

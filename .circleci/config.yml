@@ -18,14 +18,14 @@ jobs:
           name: build libgit2
           command:
             chmod +x scripts/circleci-libgit2.sh && ./scripts/circleci-libgit2.sh
-      - run:
-          name: run tests
-          command:
-            go test ./... -coverprofile=coverage.txt -covermode=atomic
-      - run:
-          name: push on codecov result
-          command:
-            bash <(curl -s https://codecov.io/bash)
+ #     - run:
+ #         name: run tests
+ #         command:
+ #           go test ./... -coverprofile=coverage.txt -covermode=atomic
+ #     - run:
+ #         name: push on codecov result
+ #         command:
+ #           bash <(curl -s https://codecov.io/bash)
       - run:
           name: build
           command:
