@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/isacikgoz/libgit2-api
+    docker:
+      - image: circleci/golang:1.12
+    steps: # steps that comprise the `build` job
+      - run:
+          name: get cmake
+          command:
+            sudo apt install cmake libcurl4-openssl-dev libssl-dev
+      - run:
+          name: donwload git2go
+          command:
+            go get -d gopkg.in/libgit2/git2go.v27
+      - checkout # check out source code to working dir
+      - run:
+          name: build libgit2
+          command:
+            chmod +x scripts/circleci-libgit2.sh && ./scripts/circleci-libgit2.sh
+      - run:
+          name: Push on codecov result
+          command:
+            bash <(curl -s https://codecov.io/bash)
+      - run:
+          name: build
+          command:
+            go build
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
