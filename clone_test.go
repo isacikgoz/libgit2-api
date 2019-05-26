@@ -16,7 +16,8 @@ func TestClone(t *testing.T) {
 		defer os.RemoveAll(dir) // clean up
 		dirs = append(dirs, dir)
 	}
-	creds := &CredentialsAsPlainText{
+	creds := &CredentialsAsSshAgent{
+		UserName: "git",
 	}
 	opts := &CloneOptions{
 		Credentials: creds,
@@ -27,7 +28,7 @@ func TestClone(t *testing.T) {
 		inputOpt *CloneOptions
 		err error
 	}{
-		{dirs[0], "https://github.com/isacikgoz/gia.git", opts, nil},
+		{dirs[0], "git@github.com:isacikgoz/libgit2-api.git", opts, nil},
 		{dirs[1], "", opts, ErrClone},
 	}
 	for _, test := range tests {
