@@ -7,15 +7,15 @@ import (
 )
 
 func TestFetch(t *testing.T) {
-	creds := &CredentialsAsSshAgent{
-		UserName: "git",
+	wd, _ := os.Getwd()
+	creds := &CredentialsAsPlainText{
 	}
 	dir, err := ioutil.TempDir("", "temp-fetch-dir")
 	if err != nil {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	defer os.RemoveAll(dir) // clean up
-	repo, err := Clone(dir, "git@github.com:isacikgoz/libgit2-api.git", &CloneOptions{
+	repo, err := Clone(dir, wd, &CloneOptions{
 		Credentials: creds,
 	})
 	if err != nil {

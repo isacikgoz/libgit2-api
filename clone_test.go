@@ -8,6 +8,7 @@ import (
 
 func TestClone(t *testing.T) {
 	dirs := make([]string, 0)
+	wd, _ := os.Getwd()
 	for i := 0; i < 2; i++{
 		dir, err := ioutil.TempDir("", "temp-clone-dir")
 		if err != nil {
@@ -16,8 +17,7 @@ func TestClone(t *testing.T) {
 		defer os.RemoveAll(dir) // clean up
 		dirs = append(dirs, dir)
 	}
-	creds := &CredentialsAsSshAgent{
-		UserName: "git",
+	creds := &CredentialsAsPlainText{
 	}
 	opts := &CloneOptions{
 		Credentials: creds,
@@ -28,8 +28,7 @@ func TestClone(t *testing.T) {
 		inputOpt *CloneOptions
 		err error
 	}{
-		{dirs[0], "git@github.com:isacikgoz/libgit2-api.git", opts, nil},
-		{dirs[1], "", opts, ErrClone},
+		{dirs[0], wd, opts, nil},
 	}
 	for _, test := range tests {
 		if _, err := Clone(test.inputDir, test.inputURL, test.inputOpt); err != test.err {
