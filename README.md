@@ -1,3 +1,5 @@
+[![GoDoc](https://godoc.org/github.com/isacikgoz/libgit2-api?status.svg)](https://godoc.org/github.com/isacikgoz/libgit2-api) 
+
 # libgit2-api
 
 This project aim to be an idiomatic and simple interface to libgit2 and eventually to a git repository. The main idea is to use it just as you use in command line.
