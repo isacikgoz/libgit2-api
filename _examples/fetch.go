@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	creds := &git.CredentialsAsSshAgent{
+	creds := &git.CredentialsAsSSHAgent{
 		UserName: "git",
 	}
 	opts := &git.FetchOptions{

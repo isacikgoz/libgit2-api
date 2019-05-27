@@ -22,13 +22,13 @@ func TestDefaultAuthCallbackFunc(t *testing.T) {
 			Credentials: &CredentialsAsPlainText{},
 		}, wd, "git", lib.CredTypeUserpassPlaintext, lib.ErrOk, nil},
 		{&CloneOptions{
-			Credentials: &CredentialsAsSshKey{},
+			Credentials: &CredentialsAsSSHKey{},
 		}, "git@github.com:isacikgoz/gia.git", "git", lib.CredTypeSshKey, lib.ErrOk, nil},
 		{&CloneOptions{
-			Credentials: &CredentialsAsSshKey{},
+			Credentials: &CredentialsAsSSHKey{},
 		}, "git@github.com:isacikgoz/gia.git", "git", lib.CredTypeUserpassPlaintext, lib.ErrAuth, nil},
 		{&CloneOptions{
-			Credentials: &CredentialsAsSshAgent{},
+			Credentials: &CredentialsAsSSHAgent{},
 		}, "ssh://github.com/git/git", "git", lib.CredTypeUserpassPlaintext, lib.ErrAuth, nil},
 	}
 	for _, test := range tests {

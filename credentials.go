@@ -4,15 +4,21 @@ import (
 	lib "gopkg.in/libgit2/git2go.v27"
 )
 
+// CredType defines the credentials type for authentication with remote
 type CredType uint8
 
 const (
+	// CredTypeUserpassPlaintext is used for http, https schemes
 	CredTypeUserpassPlaintext CredType = iota
-    CredTypeSshKey
-    CredTypeSshAgent
+	// CredTypeSSHKey is for authenticating over ssh
+	CredTypeSSHKey
+	// CredTypeSSHAgent is used when using an agent for ssh auth
+    CredTypeSSHAgent
 )
 
+// Credential is an interface for specfying its type
 type Credential interface {
+	// Type returns the type of credential
 	Type() CredType
 }
 
@@ -23,32 +29,38 @@ type OptionsWithCreds interface {
 	creds() Credential
 }
 
+// CredentialsAsPlainText contains basic username and password information
 type CredentialsAsPlainText struct {
 	UserName string
 	Password string
 }
 
+// Type returns the type of credential
 func (c *CredentialsAsPlainText) Type() CredType {
 	return CredTypeUserpassPlaintext
 }
 
-type CredentialsAsSshKey struct {
+// CredentialsAsSSHKey contains ssh file paths and related information
+type CredentialsAsSSHKey struct {
 	UserName string
 	PublicKeyPath string
 	PrivateKeyPath string
 	Passphrase string
 }
 
-func (c *CredentialsAsSshKey) Type() CredType {
-	return CredTypeSshKey
+// Type returns the type of credential
+func (c *CredentialsAsSSHKey) Type() CredType {
+	return CredTypeSSHKey
 }
 
-type CredentialsAsSshAgent struct {
+// CredentialsAsSSHAgent holds only usernmae if ssh daemon working
+type CredentialsAsSSHAgent struct {
 	UserName string
 }
 
-func (c *CredentialsAsSshAgent) Type() CredType {
-	return CredTypeSshAgent
+// Type returns the type of credential
+func (c *CredentialsAsSSHAgent) Type() CredType {
+	return CredTypeSSHAgent
 }
 
 func defaultRemoteCallbacks(opts OptionsWithCreds) lib.RemoteCallbacks {
@@ -76,8 +88,8 @@ func defaultAuthCallback(opts OptionsWithCreds, url string, uname string, credTy
 		}
 	case lib.CredTypeSshKey:
 		switch cr.(type) {
-		case *CredentialsAsSshKey:
-			credentials := cr.(*CredentialsAsSshKey)
+		case *CredentialsAsSSHKey:
+			credentials := cr.(*CredentialsAsSSHKey)
 			errCode, cred := lib.NewCredSshKey(credentials.UserName, credentials.PublicKeyPath, credentials.PrivateKeyPath, credentials.Passphrase)
 			return lib.ErrorCode(errCode), &cred
 		default:
@@ -85,8 +97,8 @@ func defaultAuthCallback(opts OptionsWithCreds, url string, uname string, credTy
 		}
 	case lib.CredTypeSshCustom, lib.CredTypeDefault, 70:
 		switch cr.(type) {
-		case *CredentialsAsSshAgent:
-			credentials := cr.(*CredentialsAsSshAgent)
+		case *CredentialsAsSSHAgent:
+			credentials := cr.(*CredentialsAsSSHAgent)
 			errCode, cred := lib.NewCredSshKeyFromAgent(credentials.UserName)
 			return lib.ErrorCode(errCode), &cred
 		default:
