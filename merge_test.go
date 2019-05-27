@@ -1,22 +1,13 @@
 package git
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func TestMerge(t *testing.T) {
-	wd, _ := os.Getwd()
-	creds := &CredentialsAsPlainText{}
-	dir, err := ioutil.TempDir("", "temp-merge-dir")
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
-	defer os.RemoveAll(dir) // clean up
-	repo, err := Clone(dir, wd, &CloneOptions{
-		Credentials: creds,
-	})
+	repo, err := testCloneFromLocal("merge")
+	defer os.RemoveAll(repo.path) // clean up
 	if err != nil {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
