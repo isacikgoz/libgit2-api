@@ -27,6 +27,7 @@ func TestFetch(t *testing.T) {
 	}{
 		{&FetchOptions{
 			Remote: "origin",
+			Tags: true,
 			Credentials: creds,
 		}, nil},
 		{&FetchOptions{
@@ -35,6 +36,7 @@ func TestFetch(t *testing.T) {
 		}, ErrNotValidRemoteName},
 		{&FetchOptions{
 			Credentials: creds,
+			Prune: true,
 		}, ErrNoRemoteName},
 	}
 	for _, test := range tests {

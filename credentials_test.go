@@ -2,12 +2,14 @@ package git
 
 import (
 	"testing"
+	"os"
 
 	lib "gopkg.in/libgit2/git2go.v27"
 )
 
 func TestDefaultAuthCallbackFunc(t *testing.T) {
-	opts := &CloneOptions{}
+	wd, _ := os.Getwd()
+
 	var tests = []struct {
 		inputOpts OptionsWithCreds
 		inputURL string
@@ -16,11 +18,22 @@ func TestDefaultAuthCallbackFunc(t *testing.T) {
 		outErrCode lib.ErrorCode
 		outCredential *lib.Cred
 	}{
-		{opts, "https://github.com/isacikgoz/gia.git", "", lib.CredTypeUserpassPlaintext, lib.ErrAuth, nil},
+		{&CloneOptions{
+			Credentials: &CredentialsAsPlainText{},
+		}, wd, "git", lib.CredTypeUserpassPlaintext, lib.ErrOk, nil},
+		{&CloneOptions{
+			Credentials: &CredentialsAsSshKey{},
+		}, "git@github.com:isacikgoz/gia.git", "git", lib.CredTypeSshKey, lib.ErrOk, nil},
+		{&CloneOptions{
+			Credentials: &CredentialsAsSshKey{},
+		}, "git@github.com:isacikgoz/gia.git", "git", lib.CredTypeUserpassPlaintext, lib.ErrAuth, nil},
+		{&CloneOptions{
+			Credentials: &CredentialsAsSshAgent{},
+		}, "ssh://github.com/git/git", "git", lib.CredTypeUserpassPlaintext, lib.ErrAuth, nil},
 	}
 	for _, test := range tests {
 		if errCode, _ := defaultAuthCallback(test.inputOpts, test.inputURL, test.inoutUsr, test.inputCred); errCode != test.outErrCode {
-			t.Error("test failed.")
+			t.Errorf("test failed: for input url: %s, got error code: %d\n", test.inputURL, errCode)
 		}
 	}	
 }
