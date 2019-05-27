@@ -23,4 +23,6 @@ var (
 	ErrAlreadyUpToDate = errors.New("already up-to-date")
 	// ErrFastForwardOnly if the merge can be made by fast-forward
 	ErrFastForwardOnly = errors.New("fast-forward only")
+	// ErrBranchNotFound is returned when the given ref can't found
+	ErrBranchNotFound = errors.New("cannot locate remote-tracking branch")
 )

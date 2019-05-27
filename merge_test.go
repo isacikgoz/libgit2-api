@@ -25,9 +25,9 @@ func TestMerge(t *testing.T) {
 		input  *MergeOptions
 		output error
 	}{
-		{"origin/master", &MergeOptions{
+		{"asd", &MergeOptions{
 			NoFF: true,
-		}, ErrAlreadyUpToDate},
+		}, ErrBranchNotFound},
 		{"origin/master", &MergeOptions{
 			IgnoreAlreadyUpToDate: true,
 		}, nil},

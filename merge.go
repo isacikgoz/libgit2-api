@@ -17,7 +17,7 @@ func (r *Repository) Merge(ref string, opts *MergeOptions) error {
 	repo := r.essence
 	theirhead, err := repo.LookupBranch(ref, lib.BranchRemote)
 	if err != nil {
-		return err
+		return ErrBranchNotFound
 	}
 	heads := make([]*lib.AnnotatedCommit, 0)
 	ano, err := repo.AnnotatedCommitFromRef(theirhead.Reference)
