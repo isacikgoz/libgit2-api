@@ -6,9 +6,9 @@ import (
 
 // CloneOptions are mostly used git clone options from a remote
 type CloneOptions struct {
-	Bare bool
-	Recursive bool
-	Depth int
+	Bare        bool
+	Recursive   bool
+	Depth       int
 	Credentials Credential
 }
 
@@ -20,13 +20,13 @@ func Clone(path string, url string, opts *CloneOptions) (*Repository, error) {
 	fetchOptions := &lib.FetchOptions{}
 	fetchOptions.RemoteCallbacks = defaultRemoteCallbacks(opts)
 	options.FetchOptions = fetchOptions
-	r, err:= lib.Clone(url, path, options)
+	r, err := lib.Clone(url, path, options)
 	if err != nil {
 		return nil, err
 	}
 	repository := &Repository{
 		essence: r,
-		path: path,
+		path:    path,
 	}
 	return repository, nil
 }
@@ -35,7 +35,7 @@ func (opts *CloneOptions) authCallbackFunc(url string, uname string, credType li
 	return defaultAuthCallback(opts, url, uname, credType)
 }
 
-func (opts *CloneOptions) certCheckCallbackFunc (cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
+func (opts *CloneOptions) certCheckCallbackFunc(cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
 	return defaultCertCheckCallback(opts, cert, valid, hostname)
 }
 

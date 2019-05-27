@@ -1,8 +1,8 @@
 package git
 
 import (
-	"path/filepath"
 	"errors"
+	"path/filepath"
 
 	lib "gopkg.in/libgit2/git2go.v27"
 )
@@ -10,7 +10,7 @@ import (
 // Repository is the wrapper and main interface to git repository
 type Repository struct {
 	essence *lib.Repository
-	path string
+	path    string
 }
 
 // Open load the repository from the filesystem
@@ -20,7 +20,7 @@ func Open(path string) (*Repository, error) {
 		return nil, ErrCannotOpenRepo
 	}
 	r := &Repository{
-		path: realpath,
+		path:    realpath,
 		essence: repo,
 	}
 	return r, nil

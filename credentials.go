@@ -13,7 +13,7 @@ const (
 	// CredTypeSSHKey is for authenticating over ssh
 	CredTypeSSHKey
 	// CredTypeSSHAgent is used when using an agent for ssh auth
-    CredTypeSSHAgent
+	CredTypeSSHAgent
 )
 
 // Credential is an interface for specfying its type
@@ -42,10 +42,10 @@ func (c *CredentialsAsPlainText) Type() CredType {
 
 // CredentialsAsSSHKey contains ssh file paths and related information
 type CredentialsAsSSHKey struct {
-	UserName string
-	PublicKeyPath string
+	UserName       string
+	PublicKeyPath  string
 	PrivateKeyPath string
-	Passphrase string
+	Passphrase     string
 }
 
 // Type returns the type of credential
@@ -109,7 +109,7 @@ func defaultAuthCallback(opts OptionsWithCreds, url string, uname string, credTy
 	}
 }
 
-func defaultCertCheckCallback (opts OptionsWithCreds, cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
+func defaultCertCheckCallback(opts OptionsWithCreds, cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
 	// TODO: look for certificate check
 	return 0
 }

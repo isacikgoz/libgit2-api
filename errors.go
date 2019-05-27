@@ -19,4 +19,8 @@ var (
 	ErrNoRemoteName = errors.New("remote name not specified")
 	// ErrNotValidRemoteName is returned if the given remote name is not found
 	ErrNotValidRemoteName = errors.New("not a valid remote name")
+	// ErrAlreadyUpToDate if the repo is up-to-date
+	ErrAlreadyUpToDate = errors.New("already up-to-date")
+	// ErrFastForwardOnly if the merge can be made by fast-forward
+	ErrFastForwardOnly = errors.New("fast-forward only")
 )

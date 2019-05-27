@@ -1,8 +1,8 @@
 package git
 
 import (
-	"testing"
 	"os"
+	"testing"
 
 	lib "gopkg.in/libgit2/git2go.v27"
 )
@@ -11,11 +11,11 @@ func TestDefaultAuthCallbackFunc(t *testing.T) {
 	wd, _ := os.Getwd()
 
 	var tests = []struct {
-		inputOpts OptionsWithCreds
-		inputURL string
-		inoutUsr string
-		inputCred lib.CredType
-		outErrCode lib.ErrorCode
+		inputOpts     OptionsWithCreds
+		inputURL      string
+		inoutUsr      string
+		inputCred     lib.CredType
+		outErrCode    lib.ErrorCode
 		outCredential *lib.Cred
 	}{
 		{&CloneOptions{
@@ -35,16 +35,16 @@ func TestDefaultAuthCallbackFunc(t *testing.T) {
 		if errCode, _ := defaultAuthCallback(test.inputOpts, test.inputURL, test.inoutUsr, test.inputCred); errCode != test.outErrCode {
 			t.Errorf("test failed: for input url: %s, got error code: %d\n", test.inputURL, errCode)
 		}
-	}	
+	}
 }
 
 func TestDefaultCertCheckCallback(t *testing.T) {
 	opts := &CloneOptions{}
 	var tests = []struct {
-		inputOpts OptionsWithCreds
-		inputCert *lib.Certificate
+		inputOpts  OptionsWithCreds
+		inputCert  *lib.Certificate
 		inputValid bool
-		inputHost string
+		inputHost  string
 		outErrCode lib.ErrorCode
 	}{
 		{opts, nil, false, "", 0},

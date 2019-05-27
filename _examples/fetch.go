@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	git "github.com/isacikgoz/libgit2-api"
 	"os"
-	"fmt"
 )
 
 // go run fetch.go /Users/ibrahim/Development/test/sashimi
@@ -16,7 +16,7 @@ func main() {
 		UserName: "git",
 	}
 	opts := &git.FetchOptions{
-		Remote: "origin",
+		Remote:      "origin",
 		Credentials: creds,
 	}
 	err = r.Fetch(opts)

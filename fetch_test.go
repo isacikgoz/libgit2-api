@@ -1,15 +1,14 @@
 package git
 
 import (
-	"testing"
 	"io/ioutil"
 	"os"
+	"testing"
 )
 
 func TestFetch(t *testing.T) {
 	wd, _ := os.Getwd()
-	creds := &CredentialsAsPlainText{
-	}
+	creds := &CredentialsAsPlainText{}
 	dir, err := ioutil.TempDir("", "temp-fetch-dir")
 	if err != nil {
 		t.Fatalf("Test Failed. error: %s", err.Error())
@@ -22,21 +21,21 @@ func TestFetch(t *testing.T) {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	var tests = []struct {
-		input *FetchOptions
+		input  *FetchOptions
 		output error
 	}{
 		{&FetchOptions{
-			Remote: "origin",
-			Tags: true,
+			Remote:      "origin",
+			Tags:        true,
 			Credentials: creds,
 		}, nil},
 		{&FetchOptions{
-			Remote: "asda",
+			Remote:      "asda",
 			Credentials: creds,
 		}, ErrNotValidRemoteName},
 		{&FetchOptions{
 			Credentials: creds,
-			Prune: true,
+			Prune:       true,
 		}, ErrNoRemoteName},
 	}
 	for _, test := range tests {

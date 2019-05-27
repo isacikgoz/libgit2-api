@@ -1,15 +1,15 @@
 package git
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestOpen(t *testing.T) {
 	wd, _ := os.Getwd()
 	var tests = []struct {
 		input string
-		err error
+		err   error
 	}{
 		{"/tmp", ErrCannotOpenRepo},
 		{"/", ErrCannotOpenRepo},

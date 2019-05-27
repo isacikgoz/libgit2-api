@@ -5,26 +5,25 @@ import (
 )
 
 // FetchOptions provides common options for fetch command
-type FetchOptions struct{
-	Remote string
+type FetchOptions struct {
+	Remote      string
 	Credentials Credential
-	Prune bool
-	All bool
-	Tags bool
+	Prune       bool
+	All         bool
+	Tags        bool
 }
 
 // Fetch downloads refs from given remote
-func (r *Repository) Fetch (opts *FetchOptions) error {
+func (r *Repository) Fetch(opts *FetchOptions) error {
 	rc := r.essence.Remotes
 	// refscpes := []string{}
-	options := &lib.FetchOptions{
-	}
+	options := &lib.FetchOptions{}
 	options.RemoteCallbacks = defaultRemoteCallbacks(opts)
 	if opts.Tags {
 		options.DownloadTags = lib.DownloadTagsAll
 	}
 	if opts.Prune {
-		options.Prune =lib.FetchPruneOn
+		options.Prune = lib.FetchPruneOn
 	}
 	if opts.All {
 
@@ -47,7 +46,7 @@ func (opts *FetchOptions) authCallbackFunc(url string, uname string, credType li
 	return defaultAuthCallback(opts, url, uname, credType)
 }
 
-func (opts *FetchOptions) certCheckCallbackFunc (cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
+func (opts *FetchOptions) certCheckCallbackFunc(cert *lib.Certificate, valid bool, hostname string) lib.ErrorCode {
 	return defaultCertCheckCallback(opts, cert, valid, hostname)
 }
 

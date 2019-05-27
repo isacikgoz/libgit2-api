@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	git "github.com/isacikgoz/libgit2-api"
 	"os"
-	"fmt"
 )
 
 // go run clone.go /Users/ibrahim/Development/sig git@github.com:isacikgoz/sig.git
@@ -13,7 +13,7 @@ func main() {
 		UserName: "git",
 	}
 	_, err := git.Clone(os.Args[1], os.Args[2], &git.CloneOptions{
-		Bare: false,
+		Bare:        false,
 		Credentials: creds,
 	})
 	if err != nil {
