@@ -25,4 +25,6 @@ var (
 	ErrFastForwardOnly = errors.New("fast-forward only")
 	// ErrBranchNotFound is returned when the given ref can't found
 	ErrBranchNotFound = errors.New("cannot locate remote-tracking branch")
+	// ErrEntryNotIndexed is returned when the entry is not indexed
+	ErrEntryNotIndexed = errors.New("entry is not indexed")
 )
