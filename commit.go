@@ -32,6 +32,31 @@ func (s *Signatute) toNewLibSignature() *lib.Signature {
 	}
 }
 
+// Commits returns all of the commits of the repository
+func (r *Repository) Commits() ([]*Commit, error) {
+	head, err := r.essence.Head()
+	if err != nil {
+		return nil, err
+	}
+	walk, err := r.essence.Walk()
+	if err != nil {
+		return nil, err
+	}
+	if err := walk.Push(head.Target()); err != nil {
+		return nil, err
+	}
+	buffer := make([]*Commit, 0)
+	defer walk.Free()
+	err = walk.Iterate(func(commit *lib.Commit) bool {
+
+		c := unpackRawCommit(r, commit)
+
+		buffer = append(buffer, c)
+		return true
+	})
+	return buffer, err
+}
+
 func unpackRawCommit(repo *Repository, raw *lib.Commit) *Commit {
 	oid := raw.AsObject().Id()
 
