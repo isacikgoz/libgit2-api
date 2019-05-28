@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	git "github.com/isacikgoz/libgit2-api"
 	"os"
+
+	git "github.com/isacikgoz/libgit2-api"
 )
 
 // go run clone.go /Users/ibrahim/Development/sig git@github.com:isacikgoz/sig.git
@@ -19,5 +19,4 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("finished")
 }

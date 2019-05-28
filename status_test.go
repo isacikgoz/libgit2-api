@@ -9,6 +9,10 @@ import (
 func TestAddToIndex(t *testing.T) {
 	repo, err := testCloneFromLocal("add")
 	defer os.RemoveAll(repo.path) // clean up
+	status, err := repo.loadStatus()
+	if err != nil {
+		t.Fatalf("Test Failed. error: %s", err.Error())
+	}
 	if err != nil {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
@@ -18,7 +22,7 @@ func TestAddToIndex(t *testing.T) {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}
 	// get the status entries
-	status, err := repo.loadStatus()
+	status, err = repo.loadStatus()
 	if err != nil {
 		t.Fatalf("Test Failed. error: %s", err.Error())
 	}

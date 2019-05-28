@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	git "github.com/isacikgoz/libgit2-api"
 	"os"
+
+	git "github.com/isacikgoz/libgit2-api"
 )
 
 // go run fetch.go /Users/ibrahim/Development/test/sashimi
@@ -23,5 +23,4 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("finished")
 }
