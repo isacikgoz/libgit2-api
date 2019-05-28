@@ -53,7 +53,7 @@ func TestAmend(t *testing.T) {
 		inputSig *Signatute
 		output   error
 	}{
-		{commit.Message(), sig, nil},
+		{commit.Message, sig, nil},
 		{"", sig, nil},
 	}
 	for _, test := range tests {

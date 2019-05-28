@@ -10,6 +10,11 @@ import (
 type Commit struct {
 	essence *lib.Commit
 	owner   *Repository
+
+	Author  *Signatute
+	Message string
+	Summary string
+	Hash    string
 }
 
 // Signatute is the person who signs a commit
@@ -25,6 +30,29 @@ func (s *Signatute) toNewLibSignature() *lib.Signature {
 		Email: s.Email,
 		When:  s.When,
 	}
+}
+
+func unpackRawCommit(repo *Repository, raw *lib.Commit) *Commit {
+	oid := raw.AsObject().Id()
+
+	hash := oid.String()
+	author := &Signatute{
+		Name:  raw.Author().Name,
+		Email: raw.Author().Email,
+		When:  raw.Author().When,
+	}
+	sum := raw.Summary()
+	msg := raw.Message()
+
+	c := &Commit{
+		essence: raw,
+		owner:   repo,
+		Hash:    hash,
+		Author:  author,
+		Message: msg,
+		Summary: sum,
+	}
+	return c
 }
 
 // Commit adds a new commit onject to repository
@@ -63,10 +91,7 @@ func (r *Repository) Commit(message string, author ...*Signatute) (*Commit, erro
 	if err != nil {
 		return nil, err
 	}
-	return &Commit{
-		essence: commit,
-		owner:   r,
-	}, nil
+	return unpackRawCommit(r, commit), nil
 }
 
 // Amend updates the commit and returns NEW commit pointer
@@ -86,10 +111,6 @@ func (c *Commit) Amend(message string, author ...*Signatute) (*Commit, error) {
 		return nil, err
 	}
 	defer tree.Free()
-	// var msg string
-	// if len(message) <= 0 {
-
-	// }
 	oid, err := c.essence.Amend("HEAD", author[0].toNewLibSignature(), author[0].toNewLibSignature(), message, tree)
 	if err != nil {
 		return nil, err
@@ -102,9 +123,4 @@ func (c *Commit) Amend(message string, author ...*Signatute) (*Commit, error) {
 		essence: commit,
 		owner:   c.owner,
 	}, nil
-}
-
-// Message returns the commit message
-func (c *Commit) Message() string {
-	return c.essence.Message()
 }

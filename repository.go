@@ -13,6 +13,16 @@ type Repository struct {
 	path    string
 }
 
+// RefType defines the ref types
+type RefType uint8
+
+// These types are used for mapping references
+const (
+	RefTypeTag RefType = iota
+	RefTypeBranch
+	RefTypeHEAD
+)
+
 // Open load the repository from the filesystem
 func Open(path string) (*Repository, error) {
 	repo, realpath, err := initRepoFromPath(path)
