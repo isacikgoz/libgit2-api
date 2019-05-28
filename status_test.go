@@ -8,24 +8,20 @@ import (
 
 func TestAddToIndex(t *testing.T) {
 	repo, err := testCloneFromLocal("add")
+	checkFatal(t, err)
+
 	defer os.RemoveAll(repo.path) // clean up
 	status, err := repo.loadStatus()
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	// create a file to add
-	d1 := []byte("package git\n\nimport \"fmt\"\n\nfunc test() {\n\tfmt.Println(\"a\")\n}\n")
-	if err := ioutil.WriteFile(repo.path+"/added.go", d1, 0644); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	err = writeTestFile(repo.path + "/added.go")
+	checkFatal(t, err)
+
 	// get the status entries
 	status, err = repo.loadStatus()
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	var tests = []struct {
 		input  *StatusEntry
 		output error
@@ -42,31 +38,27 @@ func TestAddToIndex(t *testing.T) {
 func TestRemoveFromIndex(t *testing.T) {
 	repo, err := testCloneFromLocal("reset")
 	defer os.RemoveAll(repo.path) // clean up
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	// create a file to add
-	d1 := []byte("package git\n\nimport \"fmt\"\n\nfunc test() {\n\tfmt.Println(\"a\")\n}\n")
-	if err := ioutil.WriteFile(repo.path+"/added.go", d1, 0644); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	err = writeTestFile(repo.path + "/added.go")
+	checkFatal(t, err)
+
 	// create this file to see that it is not included into commit
-	if err := ioutil.WriteFile(repo.path+"/untracked.go", d1, 0644); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	err = writeTestFile(repo.path + "/untracked.go")
+	checkFatal(t, err)
+
 	// get the status entries
 	status, err := repo.loadStatus()
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
-	if err := repo.AddToIndex(status.Entities[0]); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
+	err = repo.AddToIndex(status.Entities[0])
+	checkFatal(t, err)
+
 	// reload status to get new file stats
 	status, err = repo.loadStatus()
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	var tests = []struct {
 		input  *StatusEntry
 		output error
@@ -79,4 +71,9 @@ func TestRemoveFromIndex(t *testing.T) {
 			t.Errorf("input: %s, output: %s\n", test.input.diffDelta.OldFile.Path, err.Error())
 		}
 	}
+}
+
+func writeTestFile(path string) error {
+	d1 := []byte("package git\n\nimport \"fmt\"\n\nfunc test() {\n\tfmt.Println(\"a\")\n}\n")
+	return ioutil.WriteFile(path, d1, 0644)
 }

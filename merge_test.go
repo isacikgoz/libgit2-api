@@ -8,9 +8,8 @@ import (
 func TestMerge(t *testing.T) {
 	repo, err := testCloneFromLocal("merge")
 	defer os.RemoveAll(repo.path) // clean up
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	var tests = []struct {
 		branch string
 		input  *MergeOptions

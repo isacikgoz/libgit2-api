@@ -11,9 +11,7 @@ func TestClone(t *testing.T) {
 	wd, _ := os.Getwd()
 	for i := 0; i < 2; i++ {
 		dir, err := ioutil.TempDir("", "temp-clone-dir")
-		if err != nil {
-			t.Fatalf("Test Failed. error: %s", err.Error())
-		}
+		checkFatal(t, err)
 		defer os.RemoveAll(dir) // clean up
 		dirs = append(dirs, dir)
 	}

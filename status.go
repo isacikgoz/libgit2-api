@@ -7,6 +7,7 @@ import (
 // State is the current state of the repository
 type State int
 
+// The different states for a repo
 const (
 	StateUnknown State = iota
 	StateNone
@@ -80,24 +81,19 @@ type Status struct {
 	Entities []*StatusEntry
 }
 
+// Diff is the wrapper for a diff content acquired from repo
 type Diff struct {
 	deltas []*DiffDelta
 	stats  []string
 	patchs []string
 }
 
+// Deltas returns the actual changes with file info
 func (d *Diff) Deltas() []*DiffDelta {
 	return d.deltas
 }
 
-func (d *Diff) Patches() []string {
-	return d.patchs
-}
-
-func (d *Diff) Stats() []string {
-	return d.stats
-}
-
+// DiffDelta holds delta status, file changes and the actual patchs
 type DiffDelta struct {
 	Status  int
 	OldFile *DiffFile
@@ -105,6 +101,7 @@ type DiffDelta struct {
 	Patch   string
 }
 
+// DiffFile the file that has been changed
 type DiffFile struct {
 	Path string
 	Hash string

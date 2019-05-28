@@ -6,12 +6,12 @@ import (
 )
 
 func TestFetch(t *testing.T) {
-	creds := &CredentialsAsPlainText{}
 	repo, err := testCloneFromLocal("merge")
 	defer os.RemoveAll(repo.path) // clean up
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
+	creds := &CredentialsAsPlainText{}
+
 	var tests = []struct {
 		input  *FetchOptions
 		output error

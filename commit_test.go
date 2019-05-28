@@ -1,7 +1,6 @@
 package git
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -10,20 +9,19 @@ import (
 func TestCommit(t *testing.T) {
 	repo, err := testCloneFromLocal("commit")
 	defer os.RemoveAll(repo.path) // clean up
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
-	if err := addTestFilesToRepo(repo); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
+	err = addTestFilesToRepo(repo)
+	checkFatal(t, err)
+
 	var tests = []struct {
 		inputMsg string
 		inputSig *Signatute
 		output   error
 	}{
 		{"test commit", &Signatute{
-			Name:  "Ibrahim Serdar Acikgoz",
-			Email: "serdarcikgoz86@gmail.com",
+			Name:  "Some Guy",
+			Email: "guysome@gmail.com",
 			When:  time.Now(),
 		}, nil},
 	}
@@ -37,21 +35,19 @@ func TestCommit(t *testing.T) {
 func TestAmend(t *testing.T) {
 	repo, err := testCloneFromLocal("amend")
 	defer os.RemoveAll(repo.path) // clean up
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
-	if err := addTestFilesToRepo(repo); err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
+	err = addTestFilesToRepo(repo)
+	checkFatal(t, err)
+
 	sig := &Signatute{
-		Name:  "Ibrahim Serdar Acikgoz",
-		Email: "serdarcikgoz86@gmail.com",
+		Name:  "Some Guy",
+		Email: "guysome@gmail.com",
 		When:  time.Now(),
 	}
 	commit, err := repo.Commit("amaend commit testing", sig)
-	if err != nil {
-		t.Fatalf("Test Failed. error: %s", err.Error())
-	}
+	checkFatal(t, err)
+
 	var tests = []struct {
 		inputMsg string
 		inputSig *Signatute
@@ -69,16 +65,15 @@ func TestAmend(t *testing.T) {
 
 func addTestFilesToRepo(repo *Repository) error {
 	// create a file to add
-	d1 := []byte("package git\n\nimport \"fmt\"\n\nfunc test() {\n\tfmt.Println(\"a\")\n}\n")
-	err := ioutil.WriteFile(repo.path+"/added.go", d1, 0644)
-	if err != nil {
+	if err := writeTestFile(repo.path + "/added.go"); err != nil {
 		return err
 	}
+
 	// create this file to see that it is not included into commit
-	err = ioutil.WriteFile(repo.path+"/untracked.go", d1, 0644)
-	if err != nil {
+	if err := writeTestFile(repo.path + "/untracked.go"); err != nil {
 		return err
 	}
+
 	// get the status entries
 	status, err := repo.loadStatus()
 	if err != nil {
