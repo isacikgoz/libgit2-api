@@ -1,3 +1,4 @@
+#!/bin/bash
 cd $HOME
 
 LG2VER="0.27.0"
