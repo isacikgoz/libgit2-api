@@ -100,3 +100,13 @@ func unpackRawBranch(branch *lib.Branch) (*Branch, error) {
 	}
 	return b, nil
 }
+
+// Type is the reference type of this ref
+func (b *Branch) Type() RefType {
+	return b.refType
+}
+
+// Target is the hash of targeted commit
+func (b *Branch) Target() *Commit {
+	return b.target
+}

@@ -11,6 +11,8 @@ import (
 type Repository struct {
 	essence *lib.Repository
 	path    string
+
+	RefMap map[string][]Ref
 }
 
 // RefType defines the ref types
@@ -22,6 +24,12 @@ const (
 	RefTypeBranch
 	RefTypeHEAD
 )
+
+// Ref is the wrapper of lib.Ref
+type Ref interface {
+	Type() RefType
+	Target() *Commit
+}
 
 // Open load the repository from the filesystem
 func Open(path string) (*Repository, error) {
