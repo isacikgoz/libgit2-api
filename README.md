@@ -1,4 +1,4 @@
-[![GoDoc](https://godoc.org/github.com/isacikgoz/libgit2-api?status.svg)](https://godoc.org/github.com/isacikgoz/libgit2-api) [![CircleCI](https://img.shields.io/circleci/build/github/isacikgoz/libgit2-api.svg)](https://circleci.com/gh/isacikgoz/libgit2-api/tree/master)
+[![GoDoc](https://godoc.org/github.com/isacikgoz/libgit2-api?status.svg)](https://godoc.org/github.com/isacikgoz/libgit2-api) [![CircleCI](https://img.shields.io/circleci/build/github/isacikgoz/libgit2-api.svg)](https://circleci.com/gh/isacikgoz/libgit2-api/tree/master) [![Go Report Card](https://goreportcard.com/badge/github.com/isacikgoz/libgit2-api)](https://goreportcard.com/report/github.com/isacikgoz/libgit2-api)
 
 # libgit2-api
 

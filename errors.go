@@ -13,7 +13,7 @@ var (
 	ErrClone = errors.New("cannot clone repo")
 	// ErrCannotOpenRepo is returned when the repo couldn't be loaded from filesystem
 	ErrCannotOpenRepo = errors.New("cannot load repository")
-	// ErrCreateCallbackFail is reuterned when an error occured while creating callbacks
+	// ErrCreateCallbackFail is reuterned when an error occurred while creating callbacks
 	ErrCreateCallbackFail = errors.New("cannot create default callbacks")
 	// ErrNoRemoteName if the remote name is empty while fetching
 	ErrNoRemoteName = errors.New("remote name not specified")
