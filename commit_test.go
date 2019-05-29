@@ -93,3 +93,17 @@ func addTestFilesToRepo(repo *Repository) error {
 	// add first file "added.go" to index
 	return repo.AddToIndex(status.Entities[0])
 }
+
+func TestDiff(t *testing.T) {
+	repo, err := testCloneFromLocal("commit")
+	defer os.RemoveAll(repo.path) // clean up
+	checkFatal(t, err)
+
+	commits, err := repo.Commits()
+	checkFatal(t, err)
+
+	commit := commits[0]
+	if _, err := commit.Diff(); err != nil {
+		t.Errorf("test failed. got error: %s\n", err.Error())
+	}
+}

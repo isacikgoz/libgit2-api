@@ -1,6 +1,7 @@
 package git
 
 import (
+	"strings"
 	"time"
 
 	lib "gopkg.in/libgit2/git2go.v27"
@@ -148,4 +149,94 @@ func (c *Commit) Amend(message string, author ...*Signatute) (*Commit, error) {
 		essence: commit,
 		owner:   c.owner,
 	}, nil
+}
+
+// Diff has similar behavior to "git diff <commit>"
+func (c *Commit) Diff() (*Diff, error) {
+	// if c.essence.ParentCount() > 1 {
+	// 	return nil, errors.New("commit has multiple parents")
+	// }
+
+	cTree, err := c.essence.Tree()
+	if err != nil {
+		return nil, err
+	}
+	defer cTree.Free()
+	var pTree *lib.Tree
+	if c.essence.ParentCount() > 0 {
+		if pTree, err = c.essence.Parent(0).Tree(); err != nil {
+			return nil, err
+		}
+		defer pTree.Free()
+	}
+
+	opt, err := lib.DefaultDiffOptions()
+	if err != nil {
+		return nil, err
+	}
+
+	diff, err := c.owner.essence.DiffTreeToTree(pTree, cTree, &opt)
+	if err != nil {
+		return nil, err
+	}
+	defer diff.Free()
+
+	stats, err := diff.Stats()
+	if err != nil {
+		return nil, err
+	}
+
+	statsText, err := stats.String(lib.DiffStatsFull, 80)
+	if err != nil {
+		return nil, err
+	}
+	ddeltas := make([]*DiffDelta, 0)
+	patchs := make([]string, 0)
+	deltas, err := diff.NumDeltas()
+	if err != nil {
+		return nil, err
+	}
+
+	var patch *lib.Patch
+	var patchtext string
+
+	for i := 0; i < deltas; i++ {
+		if patch, err = diff.Patch(i); err != nil {
+			continue
+		}
+		var dd lib.DiffDelta
+		if dd, err = diff.GetDelta(i); err != nil {
+			continue
+		}
+		d := &DiffDelta{
+			Status: int(dd.Status),
+			NewFile: &DiffFile{
+				Path: dd.NewFile.Path,
+				Hash: dd.NewFile.Oid.String(),
+			},
+			OldFile: &DiffFile{
+				Path: dd.OldFile.Path,
+				Hash: dd.OldFile.Oid.String(),
+			},
+		}
+
+		if patchtext, err = patch.String(); err != nil {
+			continue
+		}
+		d.Patch = patchtext
+
+		ddeltas = append(ddeltas, d)
+		patchs = append(patchs, patchtext)
+
+		if err := patch.Free(); err != nil {
+			return nil, err
+		}
+	}
+
+	d := &Diff{
+		deltas: ddeltas,
+		stats:  strings.Split(statsText, "\n"),
+		patchs: patchs,
+	}
+	return d, nil
 }
