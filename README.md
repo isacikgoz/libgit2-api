@@ -18,11 +18,13 @@ First of all you should get this project by:
 `go get -d github.com/isacikoz/libgit2-api`
 
 After you downloaded it you will need a compiled libgit2 library on your operating system. If you are on macOS and using brew, you can install libgit2 via `brew install libgit2`, if you want to build it by yourself here you go:
+
 - make sure you have following libraries and tools installed:
   - cmake
   - pkg-config
   - libssl
   - libssh2
+
 - run the script file (Linux): `scripts/install-libgit2.sh`
 
 After you install required library, you can use this API. Also, I am considering to supply a sample make file so that you can build your Go application with this project.
