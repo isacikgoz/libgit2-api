@@ -86,7 +86,7 @@ func addTestFilesToRepo(repo *Repository) error {
 	}
 
 	// get the status entries
-	status, err := repo.loadStatus()
+	status, err := repo.LoadStatus()
 	if err != nil {
 		return err
 	}

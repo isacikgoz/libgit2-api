@@ -11,7 +11,7 @@ func TestAddToIndex(t *testing.T) {
 	checkFatal(t, err)
 
 	defer os.RemoveAll(repo.path) // clean up
-	status, err := repo.loadStatus()
+	status, err := repo.LoadStatus()
 	checkFatal(t, err)
 
 	// create a file to add
@@ -19,7 +19,7 @@ func TestAddToIndex(t *testing.T) {
 	checkFatal(t, err)
 
 	// get the status entries
-	status, err = repo.loadStatus()
+	status, err = repo.LoadStatus()
 	checkFatal(t, err)
 
 	var tests = []struct {
@@ -49,14 +49,14 @@ func TestRemoveFromIndex(t *testing.T) {
 	checkFatal(t, err)
 
 	// get the status entries
-	status, err := repo.loadStatus()
+	status, err := repo.LoadStatus()
 	checkFatal(t, err)
 
 	err = repo.AddToIndex(status.Entities[0])
 	checkFatal(t, err)
 
 	// reload status to get new file stats
-	status, err = repo.loadStatus()
+	status, err = repo.LoadStatus()
 	checkFatal(t, err)
 
 	var tests = []struct {

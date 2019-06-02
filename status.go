@@ -107,7 +107,7 @@ type DiffFile struct {
 	Hash string
 }
 
-func (r *Repository) loadStatus() (*Status, error) {
+func (r *Repository) LoadStatus() (*Status, error) {
 	statusOptions := &lib.StatusOptions{
 		Show:  lib.StatusShowIndexAndWorkdir,
 		Flags: lib.StatusOptIncludeUntracked,
@@ -171,8 +171,35 @@ func (s *Status) addToStatus(raw lib.StatusEntry) {
 }
 
 // Indexed true if entry added to index
+func (e *StatusEntry) String() string {
+	return e.diffDelta.OldFile.Path
+}
+
+// Indexed true if entry added to index
 func (e *StatusEntry) Indexed() bool {
 	return e.index == IndexTypeStaged
+}
+
+// StatusEntryString returns entry status in pretty format
+func (e *StatusEntry) StatusEntryString() string {
+	switch e.statusEntryType {
+	case StatusEntryTypeNew:
+		return "Added"
+	case StatusEntryTypeDeleted:
+		return "Deleted"
+	case StatusEntryTypeModified:
+		return "Modified"
+	case StatusEntryTypeRenamed:
+		return "Renamed"
+	case StatusEntryTypeUntracked:
+		return "Untracked"
+	case StatusEntryTypeTypeChange:
+		return "Type change"
+	case StatusEntryTypeConflicted:
+		return "Conflicted"
+	default:
+		return "Unknown"
+	}
 }
 
 // AddToIndex is the wrapper of "git add /path/to/file" command

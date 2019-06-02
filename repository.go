@@ -13,6 +13,7 @@ type Repository struct {
 	path    string
 
 	RefMap map[string][]Ref
+	Head   *Branch
 }
 
 // RefType defines the ref types
@@ -57,4 +58,8 @@ func initRepoFromPath(path string) (*lib.Repository, string, error) {
 		}
 	}
 	return nil, walk, errors.New("cannot load a git repository from " + path)
+}
+
+func (r *Repository) Path() string {
+	return r.path
 }
