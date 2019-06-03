@@ -70,9 +70,9 @@ var statusEntryTypeMap = map[lib.Status]StatusEntryType{
 
 // StatusEntry contains data for a single status entry
 type StatusEntry struct {
-	index           IndexType
-	statusEntryType StatusEntryType
-	diffDelta       *DiffDelta
+	index     IndexType
+	EntryType StatusEntryType
+	diffDelta *DiffDelta
 }
 
 // Status contains all git status data
@@ -107,7 +107,10 @@ type DiffFile struct {
 	Hash string
 }
 
+// LoadStatus simply emulates a "git status" and returns the result
 func (r *Repository) LoadStatus() (*Status, error) {
+	// this returns err does it matter?
+	r.loadHead()
 	statusOptions := &lib.StatusOptions{
 		Show:  lib.StatusShowIndexAndWorkdir,
 		Flags: lib.StatusOptIncludeUntracked,
@@ -140,6 +143,25 @@ func (r *Repository) LoadStatus() (*Status, error) {
 	return s, nil
 }
 
+func (r *Repository) loadHead() error {
+	head, err := r.essence.Head()
+	if err != nil {
+		return err
+	}
+	branch, err := unpackRawBranch(head.Branch())
+	if err != nil {
+		return err
+	}
+	// if branch.Upstream != nil {
+	// 	branch.Ahead, branch.Behind, err = r.essence.AheadBehind(branch.essence.Target(), branch.Upstream.essence.Target())
+	// }
+	if err != nil {
+		// a warning here
+	}
+	r.Head = branch
+	return nil
+}
+
 func (s *Status) addToStatus(raw lib.StatusEntry) {
 	for rawStatus, indexType := range indexTypeMap {
 		set := raw.Status & rawStatus
@@ -161,9 +183,9 @@ func (s *Status) addToStatus(raw lib.StatusEntry) {
 				},
 			}
 			e := &StatusEntry{
-				index:           indexType,
-				statusEntryType: statusEntryTypeMap[set],
-				diffDelta:       d,
+				index:     indexType,
+				EntryType: statusEntryTypeMap[set],
+				diffDelta: d,
 			}
 			s.Entities = append(s.Entities, e)
 		}
@@ -182,7 +204,7 @@ func (e *StatusEntry) Indexed() bool {
 
 // StatusEntryString returns entry status in pretty format
 func (e *StatusEntry) StatusEntryString() string {
-	switch e.statusEntryType {
+	switch e.EntryType {
 	case StatusEntryTypeNew:
 		return "Added"
 	case StatusEntryTypeDeleted:

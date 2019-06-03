@@ -60,6 +60,7 @@ func initRepoFromPath(path string) (*lib.Repository, string, error) {
 	return nil, walk, errors.New("cannot load a git repository from " + path)
 }
 
+// Path returns the filesystem location of the repository
 func (r *Repository) Path() string {
 	return r.path
 }
