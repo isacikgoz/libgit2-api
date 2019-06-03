@@ -152,6 +152,12 @@ func (r *Repository) loadHead() error {
 	if err != nil {
 		return err
 	}
+	obj, err := r.essence.RevparseSingle(branch.Hash)
+	if err == nil && obj != nil {
+		if commit, _ := obj.AsCommit(); commit != nil {
+			branch.target = unpackRawCommit(r, commit)
+		}
+	}
 	// if branch.Upstream != nil {
 	// 	branch.Ahead, branch.Behind, err = r.essence.AheadBehind(branch.essence.Target(), branch.Upstream.essence.Target())
 	// }
