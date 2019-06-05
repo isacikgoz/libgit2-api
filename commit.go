@@ -120,6 +120,10 @@ func (r *Repository) Commit(message string, author ...*Signatute) (*Commit, erro
 	return unpackRawCommit(r, commit), nil
 }
 
+func (c *Commit) String() string {
+	return c.Summary
+}
+
 // Amend updates the commit and returns NEW commit pointer
 func (c *Commit) Amend(message string, author ...*Signatute) (*Commit, error) {
 	repo := c.owner.essence
