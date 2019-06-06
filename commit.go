@@ -1,6 +1,7 @@
 package git
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -213,7 +214,7 @@ func (c *Commit) Diff() (*Diff, error) {
 			continue
 		}
 		d := &DiffDelta{
-			Status: int(dd.Status),
+			Status: DeltaStatus(dd.Status),
 			NewFile: &DiffFile{
 				Path: dd.NewFile.Path,
 				Hash: dd.NewFile.Oid.String(),
@@ -222,6 +223,7 @@ func (c *Commit) Diff() (*Diff, error) {
 				Path: dd.OldFile.Path,
 				Hash: dd.OldFile.Oid.String(),
 			},
+			Commit: c,
 		}
 
 		if patchtext, err = patch.String(); err != nil {
@@ -243,4 +245,12 @@ func (c *Commit) Diff() (*Diff, error) {
 		patchs: patchs,
 	}
 	return d, nil
+}
+
+// ParentID returns the commits parent hash.
+func (c *Commit) ParentID() (string, error) {
+	if c.essence.Parent(0) == nil {
+		return "", fmt.Errorf("%s", "commit does not have parents")
+	}
+	return c.essence.Parent(0).AsObject().Id().String(), nil
 }

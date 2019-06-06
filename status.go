@@ -22,6 +22,24 @@ const (
 	StateApplyMailboxOrRebase
 )
 
+// DeltaStatus ondicates a files status in a diff
+type DeltaStatus int
+
+// Delta status of a file e.g. on a commit
+const (
+	DeltaUnmodified DeltaStatus = iota
+	DeltaAdded
+	DeltaDeleted
+	DeltaModified
+	DeltaRenamed
+	DeltaCopied
+	DeltaIgnored
+	DeltaUntracked
+	DeltaTypeChange
+	DeltaUnreadable
+	DeltaConflicted
+)
+
 // IndexType describes the different stages a status entry can be in
 type IndexType int
 
@@ -95,16 +113,21 @@ func (d *Diff) Deltas() []*DiffDelta {
 
 // DiffDelta holds delta status, file changes and the actual patchs
 type DiffDelta struct {
-	Status  int
+	Status  DeltaStatus
 	OldFile *DiffFile
 	NewFile *DiffFile
 	Patch   string
+	Commit  *Commit
 }
 
 // DiffFile the file that has been changed
 type DiffFile struct {
 	Path string
 	Hash string
+}
+
+func (d *DiffDelta) String() string {
+	return d.OldFile.Path
 }
 
 // LoadStatus simply emulates a "git status" and returns the result
@@ -180,7 +203,7 @@ func (s *Status) addToStatus(raw lib.StatusEntry) {
 				dd = raw.IndexToWorkdir
 			}
 			d := &DiffDelta{
-				Status: int(dd.Status),
+				Status: DeltaStatus(dd.Status),
 				NewFile: &DiffFile{
 					Path: dd.NewFile.Path,
 				},
@@ -257,4 +280,32 @@ func (r *Repository) RemoveFromIndex(e *StatusEntry) error {
 	}
 	defer index.Free()
 	return index.Write()
+}
+
+func (d *DiffDelta) DeltaStatusString() string {
+	switch d.Status {
+	case DeltaUnmodified:
+		return "Unmodified"
+	case DeltaAdded:
+		return "Added"
+	case DeltaDeleted:
+		return "Deleted"
+	case DeltaModified:
+		return "Modified"
+	case DeltaRenamed:
+		return "Renamed"
+	case DeltaCopied:
+		return "Copied"
+	case DeltaIgnored:
+		return "Ignored"
+	case DeltaUntracked:
+		return "Untracked"
+	case DeltaTypeChange:
+		return "TypeChange"
+	case DeltaUnreadable:
+		return "Unreadable"
+	case DeltaConflicted:
+		return "Conflicted"
+	}
+	return " "
 }
