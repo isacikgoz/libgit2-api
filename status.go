@@ -171,7 +171,7 @@ func (r *Repository) loadHead() error {
 	if err != nil {
 		return err
 	}
-	branch, err := unpackRawBranch(head.Branch())
+	branch, err := unpackRawBranch(r.essence, head.Branch())
 	if err != nil {
 		return err
 	}

@@ -34,7 +34,7 @@ func (r *Repository) Branches() ([]*Branch, error) {
 	buffer := make([]*Branch, 0)
 
 	err = branchIter.ForEach(func(branch *lib.Branch, branchType lib.BranchType) error {
-		b, err := unpackRawBranch(branch)
+		b, err := unpackRawBranch(r.essence, branch)
 		if err != nil {
 			return err
 		}
@@ -51,7 +51,7 @@ func (r *Repository) Branches() ([]*Branch, error) {
 	return buffer, err
 }
 
-func unpackRawBranch(branch *lib.Branch) (*Branch, error) {
+func unpackRawBranch(repo *lib.Repository, branch *lib.Branch) (*Branch, error) {
 	name, err := branch.Name()
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func unpackRawBranch(branch *lib.Branch) (*Branch, error) {
 		}
 		rawOid = ref.Target()
 	}
-
+	var ahead, behind int
 	hash := rawOid.String()
 	isRemote := branch.IsRemote()
 	isHead, _ := branch.IsHead()
@@ -78,6 +78,12 @@ func unpackRawBranch(branch *lib.Branch) (*Branch, error) {
 		if err != nil || us == nil {
 			// upstream not found
 		} else {
+			var err error
+			ahead, behind, err = repo.AheadBehind(branch.Reference.Target(), us.Target())
+			if err != nil {
+				ahead = 0
+				behind = 0
+			}
 			upstream = &Branch{
 				Name:     strings.Replace(us.Name(), "refs/remotes/", "", 1),
 				FullName: us.Name(),
@@ -97,6 +103,8 @@ func unpackRawBranch(branch *lib.Branch) (*Branch, error) {
 		isRemote: isRemote,
 		Head:     isHead,
 		Upstream: upstream,
+		Ahead:    ahead,
+		Behind:   behind,
 	}
 	return b, nil
 }
