@@ -282,6 +282,7 @@ func (r *Repository) RemoveFromIndex(e *StatusEntry) error {
 	return index.Write()
 }
 
+// DeltaStatusString retruns delta status as string
 func (d *DiffDelta) DeltaStatusString() string {
 	switch d.Status {
 	case DeltaUnmodified:

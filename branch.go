@@ -118,3 +118,12 @@ func (b *Branch) Type() RefType {
 func (b *Branch) Target() *Commit {
 	return b.target
 }
+
+func (b *Branch) String() string {
+	return b.Name
+}
+
+// IsRemote returns false if it is a local branch
+func (b *Branch) IsRemote() bool {
+	return b.isRemote
+}
