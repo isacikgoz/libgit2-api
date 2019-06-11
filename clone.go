@@ -20,15 +20,11 @@ func Clone(path string, url string, opts *CloneOptions) (*Repository, error) {
 	fetchOptions := &lib.FetchOptions{}
 	fetchOptions.RemoteCallbacks = defaultRemoteCallbacks(opts)
 	options.FetchOptions = fetchOptions
-	r, err := lib.Clone(url, path, options)
+	_, err := lib.Clone(url, path, options)
 	if err != nil {
 		return nil, err
 	}
-	repository := &Repository{
-		essence: r,
-		path:    path,
-	}
-	return repository, nil
+	return Open(path)
 }
 
 func (opts *CloneOptions) authCallbackFunc(url string, uname string, credType lib.CredType) (lib.ErrorCode, *lib.Cred) {
