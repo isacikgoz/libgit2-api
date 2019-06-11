@@ -133,7 +133,6 @@ func (d *DiffDelta) String() string {
 // LoadStatus simply emulates a "git status" and returns the result
 func (r *Repository) LoadStatus() (*Status, error) {
 	// this returns err does it matter?
-	r.loadHead()
 	statusOptions := &lib.StatusOptions{
 		Show:  lib.StatusShowIndexAndWorkdir,
 		Flags: lib.StatusOptIncludeUntracked,
@@ -164,31 +163,6 @@ func (r *Repository) LoadStatus() (*Status, error) {
 		s.addToStatus(statusEntry)
 	}
 	return s, nil
-}
-
-func (r *Repository) loadHead() error {
-	head, err := r.essence.Head()
-	if err != nil {
-		return err
-	}
-	branch, err := unpackRawBranch(r.essence, head.Branch())
-	if err != nil {
-		return err
-	}
-	obj, err := r.essence.RevparseSingle(branch.Hash)
-	if err == nil && obj != nil {
-		if commit, _ := obj.AsCommit(); commit != nil {
-			branch.target = unpackRawCommit(r, commit)
-		}
-	}
-	// if branch.Upstream != nil {
-	// 	branch.Ahead, branch.Behind, err = r.essence.AheadBehind(branch.essence.Target(), branch.Upstream.essence.Target())
-	// }
-	if err != nil {
-		// a warning here
-	}
-	r.Head = branch
-	return nil
 }
 
 func (s *Status) addToStatus(raw lib.StatusEntry) {

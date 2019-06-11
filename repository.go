@@ -44,6 +44,7 @@ func Open(path string) (*Repository, error) {
 		essence: repo,
 	}
 	r.RefMap = make(map[string][]Ref)
+	r.loadHead()
 	return r, nil
 }
 
@@ -60,6 +61,28 @@ func initRepoFromPath(path string) (*lib.Repository, string, error) {
 		}
 	}
 	return nil, walk, errors.New("cannot load a git repository from " + path)
+}
+
+func (r *Repository) loadHead() error {
+	head, err := r.essence.Head()
+	if err != nil {
+		return err
+	}
+	branch, err := unpackRawBranch(r.essence, head.Branch())
+	if err != nil {
+		return err
+	}
+	obj, err := r.essence.RevparseSingle(branch.Hash)
+	if err == nil && obj != nil {
+		if commit, _ := obj.AsCommit(); commit != nil {
+			branch.target = unpackRawCommit(r, commit)
+		}
+	}
+	if err != nil {
+		// a warning here
+	}
+	r.Head = branch
+	return nil
 }
 
 // Path returns the filesystem location of the repository
