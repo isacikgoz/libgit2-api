@@ -114,6 +114,9 @@ func unpackRawBranch(repo *lib.Repository, branch *lib.Branch) (*Branch, error) 
 		Ahead:    ahead,
 		Behind:   behind,
 	}
+	if isHead, _ := branch.IsHead(); isHead {
+		b.refType = RefTypeHEAD
+	}
 	return b, nil
 }
 
