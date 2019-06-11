@@ -44,6 +44,14 @@ func (r *Repository) Branches() ([]*Branch, error) {
 				b.target = unpackRawCommit(r, commit)
 			}
 		}
+		// add to refmap
+		if _, ok := r.RefMap[b.Hash]; !ok {
+			r.RefMap[b.Hash] = make([]Ref, 0)
+		}
+		refs := r.RefMap[b.Hash]
+		refs = append(refs, b)
+		r.RefMap[b.Hash] = refs
+
 		buffer = append(buffer, b)
 		return nil
 	})

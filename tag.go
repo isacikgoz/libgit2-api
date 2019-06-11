@@ -33,12 +33,14 @@ func (r *Repository) Tags() ([]*Tag, error) {
 				Name:      ref.Name(),
 				Shorthand: ref.Shorthand(),
 			}
+			// add to refmap
 			if _, ok := r.RefMap[t.Hash]; !ok {
 				r.RefMap[t.Hash] = make([]Ref, 0)
 			}
 			refs := r.RefMap[t.Hash]
 			refs = append(refs, t)
 			r.RefMap[t.Hash] = refs
+
 			obj, err := r.essence.RevparseSingle(ref.Target().String())
 			if err == nil && obj != nil {
 				if commit, _ := obj.AsCommit(); commit != nil {
@@ -59,4 +61,8 @@ func (t *Tag) Type() RefType {
 // Target is the hash of targeted commit
 func (t *Tag) Target() *Commit {
 	return t.target
+}
+
+func (t *Tag) String() string {
+	return t.Shorthand
 }

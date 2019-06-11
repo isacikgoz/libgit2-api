@@ -30,6 +30,7 @@ const (
 type Ref interface {
 	Type() RefType
 	Target() *Commit
+	String() string
 }
 
 // Open load the repository from the filesystem
@@ -42,6 +43,7 @@ func Open(path string) (*Repository, error) {
 		path:    realpath,
 		essence: repo,
 	}
+	r.RefMap = make(map[string][]Ref)
 	return r, nil
 }
 
