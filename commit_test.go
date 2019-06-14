@@ -27,10 +27,10 @@ func TestCommit(t *testing.T) {
 
 	var tests = []struct {
 		inputMsg string
-		inputSig *Signatute
+		inputSig *Signature
 		output   error
 	}{
-		{"test commit", &Signatute{
+		{"test commit", &Signature{
 			Name:  "Some Guy",
 			Email: "guysome@gmail.com",
 			When:  time.Now(),
@@ -51,7 +51,7 @@ func TestAmend(t *testing.T) {
 	err = addTestFilesToRepo(repo)
 	checkFatal(t, err)
 
-	sig := &Signatute{
+	sig := &Signature{
 		Name:  "Some Guy",
 		Email: "guysome@gmail.com",
 		When:  time.Now(),
@@ -61,7 +61,7 @@ func TestAmend(t *testing.T) {
 
 	var tests = []struct {
 		inputMsg string
-		inputSig *Signatute
+		inputSig *Signature
 		output   error
 	}{
 		{commit.Message, sig, nil},

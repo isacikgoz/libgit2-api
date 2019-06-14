@@ -13,20 +13,20 @@ type Commit struct {
 	essence *lib.Commit
 	owner   *Repository
 
-	Author  *Signatute
+	Author  *Signature
 	Message string
 	Summary string
 	Hash    string
 }
 
-// Signatute is the person who signs a commit
-type Signatute struct {
+// Signature is the person who signs a commit
+type Signature struct {
 	Name  string
 	Email string
 	When  time.Time
 }
 
-func (s *Signatute) toNewLibSignature() *lib.Signature {
+func (s *Signature) toNewLibSignature() *lib.Signature {
 	return &lib.Signature{
 		Name:  s.Name,
 		Email: s.Email,
@@ -63,7 +63,7 @@ func unpackRawCommit(repo *Repository, raw *lib.Commit) *Commit {
 	oid := raw.AsObject().Id()
 
 	hash := oid.String()
-	author := &Signatute{
+	author := &Signature{
 		Name:  raw.Author().Name,
 		Email: raw.Author().Email,
 		When:  raw.Author().When,
@@ -84,7 +84,7 @@ func unpackRawCommit(repo *Repository, raw *lib.Commit) *Commit {
 
 // Commit adds a new commit onject to repository
 // warning: this function does not check if the changes are indexed
-func (r *Repository) Commit(message string, author ...*Signatute) (*Commit, error) {
+func (r *Repository) Commit(message string, author ...*Signature) (*Commit, error) {
 	repo := r.essence
 	head, err := repo.Head()
 	if err != nil {
@@ -126,7 +126,7 @@ func (c *Commit) String() string {
 }
 
 // Amend updates the commit and returns NEW commit pointer
-func (c *Commit) Amend(message string, author ...*Signatute) (*Commit, error) {
+func (c *Commit) Amend(message string, author ...*Signature) (*Commit, error) {
 	repo := c.owner.essence
 	index, err := repo.Index()
 	if err != nil {

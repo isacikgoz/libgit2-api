@@ -59,7 +59,7 @@ func (r *Repository) Branches() ([]*Branch, error) {
 	return buffer, err
 }
 
-func unpackRawBranch(repo *lib.Repository, branch *lib.Branch) (*Branch, error) {
+func unpackRawBranch(r *lib.Repository, branch *lib.Branch) (*Branch, error) {
 	name, err := branch.Name()
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func unpackRawBranch(repo *lib.Repository, branch *lib.Branch) (*Branch, error) 
 			// upstream not found
 		} else {
 			var err error
-			ahead, behind, err = repo.AheadBehind(branch.Reference.Target(), us.Target())
+			ahead, behind, err = r.AheadBehind(branch.Reference.Target(), us.Target())
 			if err != nil {
 				ahead = 0
 				behind = 0
