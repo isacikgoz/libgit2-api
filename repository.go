@@ -44,7 +44,7 @@ func Open(path string) (*Repository, error) {
 		essence: repo,
 	}
 	r.RefMap = make(map[string][]Ref)
-	r.loadHead()
+	r.LoadHead()
 	return r, nil
 }
 
@@ -63,7 +63,8 @@ func initRepoFromPath(path string) (*lib.Repository, string, error) {
 	return nil, walk, errors.New("cannot load a git repository from " + path)
 }
 
-func (r *Repository) loadHead() error {
+// LoadHead can be used to refresh HEAD ref
+func (r *Repository) LoadHead() error {
 	head, err := r.essence.Head()
 	if err != nil {
 		return err
