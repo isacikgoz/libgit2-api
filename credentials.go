@@ -1,7 +1,7 @@
 package git
 
 import (
-	lib "gopkg.in/libgit2/git2go.v27"
+	lib "github.com/libgit2/git2go"
 )
 
 // CredType defines the credentials type for authentication with remote

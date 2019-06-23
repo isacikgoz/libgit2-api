@@ -1,2 +1,4 @@
+github.com/libgit2/git2go v0.0.0-20190618093925-b2e2b2f71bb4 h1:EyE/GmmyBd6iWkr7qS7C2C92j7+61ggJN51g5F/iMeQ=
+github.com/libgit2/git2go v0.0.0-20190618093925-b2e2b2f71bb4/go.mod h1:4bKN42efkbNYMZlvDfxGDxzl066GhpvIircZDsm8Y+Y=
 gopkg.in/libgit2/git2go.v27 v27.0.0-20190104134018-ecaeb7a21d47 h1:gVq25a2FQDJb6aZPd4GA8gJmM19LHgUTZzuq+LqcXBE=
 gopkg.in/libgit2/git2go.v27 v27.0.0-20190104134018-ecaeb7a21d47/go.mod h1:lKrzYfERNvPdRbevxLdKadsT0XwHJ10JC05CXIQgmWc=
