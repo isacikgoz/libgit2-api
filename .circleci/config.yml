@@ -8,16 +8,19 @@ jobs:
       - run:
           name: donwload git2go
           command:
-            go get -d gopkg.in/libgit2/git2go.v27
+            go get -d github.com/libgit2/git2go &&
+            cd $GOPATH/src/github.com/libgit2/git2go &&
+            git submodule update --init
       - checkout # check out source code to working dir
       - run:
           name: build libgit2
           command:
-            chmod +x scripts/circleci-libgit2.sh && ./scripts/circleci-libgit2.sh
+            chmod +x scripts/circleci-libgit2.sh && ./scripts/circleci-libgit2.sh &&
+            export PKG_CONFIG_PATH=/go/src/github.com/libgit2/git2go/static-build/build/
       - run:
           name: run tests
           command:
-            go test ./... -coverprofile=coverage.txt -covermode=atomic
+            go test --tags static ./... -coverprofile=coverage.txt -covermode=atomic
       - run:
           name: push on codecov result
           command:

@@ -1,12 +1,20 @@
-#!/bin/bash
-cd $HOME
+#!/bin/sh
 
-LG2VER="0.27.0"
+set -ex
 
-wget -O libgit2-${LG2VER}.tar.gz https://github.com/libgit2/libgit2/archive/v${LG2VER}.tar.gz
-tar -xzvf libgit2-${LG2VER}.tar.gz
-cd libgit2-${LG2VER} && mkdir build && cd build
-cmake -DTHREADSAFE=ON -DBUILD_CLAR=OFF -DCMAKE_BUILD_TYPE="RelWithDebInfo" .. && make && make install
-ldconfig
-cd $HOME
-rm -f libgit2-${LG2VER}.tar.gz && rm -rf libgit2-${LG2VER}
+ROOT="/go/src/github.com/libgit2/git2go/"
+BUILD_PATH="${ROOT}/static-build"
+VENDORED_PATH="${ROOT}/vendor/libgit2"
+
+mkdir -p "${BUILD_PATH}/build" "${BUILD_PATH}/install/lib"
+
+cd "${BUILD_PATH}/build" &&
+cmake -DTHREADSAFE=ON \
+      -DBUILD_CLAR=OFF \
+      -DBUILD_SHARED_LIBS=OFF \
+      -DCMAKE_C_FLAGS=-fPIC \
+      -DCMAKE_BUILD_TYPE="RelWithDebInfo" \
+      -DCMAKE_INSTALL_PREFIX="${BUILD_PATH}/install" \
+      "${VENDORED_PATH}" &&
+
+cmake --build . --target install
